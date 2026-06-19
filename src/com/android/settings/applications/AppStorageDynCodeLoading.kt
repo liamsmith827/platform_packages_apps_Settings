@@ -22,8 +22,8 @@ object AswAdapterStorageDynCodeLoading : AswAdapter<AswRestrictStorageDynCodeLoa
     override fun getAswTitle(ctx: Context) = ctx.getText(R.string.aep_storage_dcl)
     override fun getShortAswTitle(ctx: Context) = ctx.getText(R.string.aep_storage_dcl_short)
 
-    override fun getOnTitle(ctx: Context) = ctx.getText(R.string.aep_restricted)
-    override fun getOffTitle(ctx: Context) = ctx.getText(R.string.aep_allowed)
+    override fun getOnTitle(ctx: Context) = ctx.getText(R.string.ap_restricted)
+    override fun getOffTitle(ctx: Context) = ctx.getText(R.string.ap_allowed)
 
     override fun getNotificationToggleTitle(ctx: Context) = ctx.getText(R.string.dcl_notif_toggle_title)
 
@@ -60,12 +60,12 @@ class AppDefaultStorageDynCodeLoadingPrefController(ctx: Context, key: String) :
 
     override fun getSummaryOn() = run {
         val id = if (AswRestrictStorageDynCodeLoading.isGmsCoreInstalled(mContext, mContext.userId))
-            R.string.aep_default_summary_restricted_except_for_gmscore_clients
-            else R.string.aep_default_summary_restricted
+            R.string.ap_default_summary_restricted_except_for_gmscore_clients
+            else R.string.ap_default_summary_restricted
         resText(id)
     }
 
-    override fun getSummaryOff() = resText(R.string.aep_default_summary_allowed_for_3p_apps)
+    override fun getSummaryOff() = resText(R.string.ap_default_summary_allowed_for_3p_apps)
 }
 
 class AppDefaultStorageDynCodeLoadingFragment : BoolSettingFragment() {
@@ -74,7 +74,7 @@ class AppDefaultStorageDynCodeLoadingFragment : BoolSettingFragment() {
 
     override fun getTitle() = resText(R.string.aep_storage_dcl_short)
 
-    override fun getMainSwitchTitle() = resText(R.string.aep_default_main_switch_restrict_for_3p_apps)
+    override fun getMainSwitchTitle() = resText(R.string.ap_default_main_switch_restrict_for_3p_apps)
 
     override fun addExtraPrefs(screen: PreferenceScreen) {
         AswAdapterStorageDynCodeLoading.addAppListPageLink(screen)

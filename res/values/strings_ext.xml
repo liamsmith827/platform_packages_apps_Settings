@@ -9,6 +9,9 @@
 
     <string name="exploit_protection_settings">Exploit protection</string>
 
+    <!-- This is a duplicate used for testing, remove it. -->
+    <string name="more_security_privacy_category_title">Privacy settings</string>
+
     <string name="app_exploit_protection_category">App exploit protection</string>
 
     <string name="scramble_pin_title">Scramble PIN input layout</string>

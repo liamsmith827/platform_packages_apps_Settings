@@ -23,8 +23,8 @@ object AswAdapterNativeDebugging : AswAdapter<AswDenyNativeDebug>() {
 
     override fun getAswTitle(ctx: Context) = ctx.getText(R.string.aep_native_debug_title)
 
-    override fun getOnTitle(ctx: Context) = ctx.getText(R.string.aep_blocked)
-    override fun getOffTitle(ctx: Context) = ctx.getText(R.string.aep_allowed)
+    override fun getOnTitle(ctx: Context) = ctx.getText(R.string.ap_blocked)
+    override fun getOffTitle(ctx: Context) = ctx.getText(R.string.ap_allowed)
 
     override fun getNotificationToggleTitle(ctx: Context) = ctx.getText(R.string.aep_native_debug_notif_toggle_title)
 
@@ -58,7 +58,7 @@ class AppDefaultNativeDebuggingPrefController(ctx: Context, key: String) :
     BoolSettingFragmentPrefController(ctx, key, ExtSettings.ALLOW_NATIVE_DEBUG_BY_DEFAULT) {
 
     override fun getSummary(): CharSequence {
-        return resText(if (setting.get(mContext)) R.string.aep_default_summary_allowed_for_3p_apps else R.string.aep_default_summary_blocked)
+        return resText(if (setting.get(mContext)) R.string.ap_default_summary_allowed_for_3p_apps else R.string.ap_default_summary_blocked)
     }
 }
 
@@ -71,7 +71,7 @@ class AppDefaultNativeDebuggingFragment : BoolSettingFragment() {
 
     override fun getTitle() = getText(R.string.aep_native_debug_title)
 
-    override fun getMainSwitchTitle() = getText(R.string.aep_default_main_switch_block_for_3p_apps)
+    override fun getMainSwitchTitle() = getText(R.string.ap_default_main_switch_block_for_3p_apps)
 
     override fun addExtraPrefs(screen: PreferenceScreen) {
         AswAdapterNativeDebugging.addAppListPageLink(screen)

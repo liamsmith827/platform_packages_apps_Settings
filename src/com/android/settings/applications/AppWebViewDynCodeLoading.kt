@@ -20,8 +20,8 @@ object AswAdapterWebViewDynCodeLoading : AswAdapter<AswRestrictWebViewDynCodeLoa
 
     override fun getAswTitle(ctx: Context) = ctx.getText(R.string.aep_webview_jit)
 
-    override fun getOnTitle(ctx: Context) = ctx.getText(R.string.aep_disabled)
-    override fun getOffTitle(ctx: Context) = ctx.getText(R.string.aep_enabled)
+    override fun getOnTitle(ctx: Context) = ctx.getText(R.string.ap_disabled)
+    override fun getOffTitle(ctx: Context) = ctx.getText(R.string.ap_enabled)
 
     override fun getDetailFragmentClass() = AppWebViewDynCodeLoadingFragment::class
 }
@@ -46,8 +46,8 @@ class AppWebViewDynCodeLoadingFragment : AswExploitProtectionFragment<AswRestric
 class AppDefaultWebViewDynCodeLoadingPrefController(ctx: Context, key: String) :
         BoolSettingFragmentPrefController(ctx, key, ExtSettings.RESTRICT_WEBVIEW_DYN_CODE_LOADING_BY_DEFAULT) {
 
-    override fun getSummaryOn() = resText(R.string.aep_default_summary_disabled)
-    override fun getSummaryOff() = resText(R.string.aep_default_summary_enabled_for_3p_apps)
+    override fun getSummaryOn() = resText(R.string.ap_default_summary_disabled)
+    override fun getSummaryOff() = resText(R.string.ap_default_summary_enabled_for_3p_apps)
 }
 
 class AppDefaultWebViewDynCodeLoadingFragment : BoolSettingFragment() {
@@ -56,7 +56,7 @@ class AppDefaultWebViewDynCodeLoadingFragment : BoolSettingFragment() {
 
     override fun getTitle() = resText(R.string.aep_webview_jit)
 
-    override fun getMainSwitchTitle() = resText(R.string.aep_default_main_switch_disable_for_3p_apps)
+    override fun getMainSwitchTitle() = resText(R.string.ap_default_main_switch_disable_for_3p_apps)
 
     override fun addExtraPrefs(screen: PreferenceScreen) {
         AswAdapterWebViewDynCodeLoading.addAppListPageLink(screen)

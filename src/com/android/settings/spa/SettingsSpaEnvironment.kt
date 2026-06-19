@@ -101,6 +101,8 @@ open class SettingsSpaEnvironment(context: Context) : SpaEnvironment(context) {
         listOf(
             HomePageProvider,
             AppsMainPageProvider,
+            // TODO: position in list.
+            com.android.settings.applications.AswAdapterSocketBindToDevice.makeAppListPageProvider(),
             com.android.settings.applications.AswAdapterUseHardenedMalloc.makeAppListPageProvider(),
             com.android.settings.applications.AswAdapterUseMemoryTagging.makeAppListPageProvider(),
             com.android.settings.applications.AswAdapterUseExtendedVaSpace.makeAppListPageProvider(),

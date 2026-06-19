@@ -194,6 +194,10 @@ private fun AppInfoSettings(packageInfoPresenter: PackageInfoPresenter) {
             com.android.settings.applications.AppStorageDynCodeLoadingPreference(app)
         }
 
+        Category(title = stringResource(R.string.more_security_privacy_category_title)) {
+            com.android.settings.applications.AppSocketBindToDevicePreference(app)
+        }
+
         Category(title = stringResource(R.string.app_install_details_group_title)) {
             AppInstallerInfoPreference(app)
         }

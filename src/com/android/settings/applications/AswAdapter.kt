@@ -44,14 +44,14 @@ abstract class AswAdapter<T : AppSwitch> {
     open fun getShortAswTitle(ctx: Context) = getAswTitle(ctx)
 
     fun getDefaultTitle(ctx: Context, isOn: Boolean): CharSequence {
-        return ctx.getString(R.string.aep_default,
+        return ctx.getString(R.string.ap_default,
             if (isOn) getOnTitle(ctx) else getOffTitle(ctx)
         )
     }
 
-    open fun getOnTitle(ctx: Context): CharSequence = ctx.getText(R.string.aep_enabled)
+    open fun getOnTitle(ctx: Context): CharSequence = ctx.getText(R.string.ap_enabled)
 
-    open fun getOffTitle(ctx: Context): CharSequence = ctx.getText(R.string.aep_disabled)
+    open fun getOffTitle(ctx: Context): CharSequence = ctx.getText(R.string.ap_disabled)
 
     abstract fun getDetailFragmentClass(): KClass<out SettingsPreferenceFragment>
 

@@ -231,6 +231,8 @@ public class SettingsGateway {
     public static final String[] ENTRY_FRAGMENTS = {
             com.android.settings.applications.AppNativeDebuggingFragment.class.getName(),
             com.android.settings.applications.AppMemtagFragment.class.getName(),
+            // TODO: order in list.
+            com.android.settings.applications.AppSocketBindToDeviceFragment.class.getName(),
             com.android.settings.applications.AppHardenedMallocFragment.class.getName(),
             com.android.settings.applications.AppMemoryDynCodeLoadingFragment.class.getName(),
             com.android.settings.applications.AppStorageDynCodeLoadingFragment.class.getName(),

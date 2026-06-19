@@ -22,8 +22,8 @@ object AswAdapterMemoryDynCodeLoading : AswAdapter<AswRestrictMemoryDynCodeLoadi
     override fun getAswTitle(ctx: Context) = ctx.getText(R.string.aep_memory_dcl)
     override fun getShortAswTitle(ctx: Context) = ctx.getText(R.string.aep_memory_dcl_short)
 
-    override fun getOnTitle(ctx: Context) = ctx.getText(R.string.aep_restricted)
-    override fun getOffTitle(ctx: Context) = ctx.getText(R.string.aep_allowed)
+    override fun getOnTitle(ctx: Context) = ctx.getText(R.string.ap_restricted)
+    override fun getOffTitle(ctx: Context) = ctx.getText(R.string.ap_allowed)
 
     override fun getNotificationToggleTitle(ctx: Context) = ctx.getText(R.string.dcl_notif_toggle_title)
 
@@ -60,8 +60,8 @@ class AppDefaultMemoryDynCodeLoadingPrefController(ctx: Context, key: String) :
             ExtSettings.RESTRICT_MEMORY_DYN_CODE_LOADING_BY_DEFAULT
         ) {
 
-    override fun getSummaryOn() = resText(R.string.aep_default_summary_restricted)
-    override fun getSummaryOff() = resText(R.string.aep_default_summary_allowed_for_3p_apps)
+    override fun getSummaryOn() = resText(R.string.ap_default_summary_restricted)
+    override fun getSummaryOff() = resText(R.string.ap_default_summary_allowed_for_3p_apps)
 }
 
 class AppDefaultMemoryDynCodeLoadingFragment : BoolSettingFragment() {
@@ -70,7 +70,7 @@ class AppDefaultMemoryDynCodeLoadingFragment : BoolSettingFragment() {
 
     override fun getTitle() = resText(R.string.aep_memory_dcl_short)
 
-    override fun getMainSwitchTitle() = resText(R.string.aep_default_main_switch_restrict_for_3p_apps)
+    override fun getMainSwitchTitle() = resText(R.string.ap_default_main_switch_restrict_for_3p_apps)
 
     override fun addExtraPrefs(screen: PreferenceScreen) {
         AswAdapterMemoryDynCodeLoading.addAppListPageLink(screen)
