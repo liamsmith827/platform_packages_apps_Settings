@@ -18,6 +18,7 @@ package com.android.settings.network;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.content.Intent;
+import android.ext.ConnectivityUtil.NetworkType;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,18 +80,22 @@ public class NetworkDashboardFragment extends DashboardFragment implements
             @Nullable Lifecycle lifecycle) {
         final VpnPreferenceController vpnPreferenceController =
                 new VpnPreferenceController(context);
-        final PrivateDnsPreferenceController privateDnsPreferenceController =
-                new PrivateDnsPreferenceController(context);
+        final PrivateDnsPreferenceController physicalPrivateDnsPreferenceController =
+                new PrivateDnsPreferenceController(context, NetworkType.PHYSICAL);
+        final PrivateDnsPreferenceController vpnPrivateDnsPreferenceController =
+                new PrivateDnsPreferenceController(context, NetworkType.VPN);
 
         if (lifecycle != null) {
             lifecycle.addObserver(vpnPreferenceController);
-            lifecycle.addObserver(privateDnsPreferenceController);
+            lifecycle.addObserver(physicalPrivateDnsPreferenceController);
+            lifecycle.addObserver(vpnPrivateDnsPreferenceController);
         }
 
         final List<AbstractPreferenceController> controllers = new ArrayList<>();
 
         controllers.add(vpnPreferenceController);
-        controllers.add(privateDnsPreferenceController);
+        controllers.add(physicalPrivateDnsPreferenceController);
+        controllers.add(vpnPrivateDnsPreferenceController);
 
         // Start SettingsDumpService after the MobileNetworkRepository is created.
         Intent intent = new Intent(context, SettingsDumpService.class);
