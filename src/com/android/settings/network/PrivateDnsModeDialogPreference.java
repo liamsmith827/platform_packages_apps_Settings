@@ -23,16 +23,15 @@ import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 
 import android.app.Dialog;
 import android.app.settings.SettingsEnums;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.ext.ConnectivityUtil.NetworkType;
 import android.net.ConnectivitySettingsManager;
+import android.net.GlobalOrUserId;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -48,9 +47,7 @@ import androidx.preference.PreferenceViewHolder;
 
 import com.android.settings.R;
 import com.android.settings.overlay.FeatureFactory;
-import com.android.settings.utils.AnnotationSpan;
 import com.android.settingslib.CustomDialogPreferenceCompat;
-import com.android.settingslib.HelpUtils;
 import com.android.settingslib.RestrictedLockUtils;
 import com.android.settingslib.RestrictedLockUtilsInternal;
 
@@ -65,8 +62,6 @@ import java.util.Map;
  */
 public class PrivateDnsModeDialogPreference extends CustomDialogPreferenceCompat implements
         RadioGroup.OnCheckedChangeListener, TextWatcher {
-
-    public static final String ANNOTATION_URL = "url";
 
     private static final String TAG = "PrivateDnsModeDialog";
     // DNS_MODE -> RadioButton id
@@ -88,37 +83,40 @@ public class PrivateDnsModeDialogPreference extends CustomDialogPreferenceCompat
     @VisibleForTesting
     int mMode;
 
+    private NetworkType mNetworkType;
+    private GlobalOrUserId mTarget;
+
     public PrivateDnsModeDialogPreference(Context context) {
         super(context);
+        init();
     }
 
     public PrivateDnsModeDialogPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public PrivateDnsModeDialogPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
     }
 
     public PrivateDnsModeDialogPreference(Context context, AttributeSet attrs, int defStyleAttr,
             int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init();
     }
 
-    private final AnnotationSpan.LinkInfo mUrlLinkInfo = new AnnotationSpan.LinkInfo(
-            ANNOTATION_URL, (widget) -> {
-        final Context context = widget.getContext();
-        final Intent intent = HelpUtils.getHelpIntent(context,
-                context.getString(R.string.help_uri_private_dns),
-                context.getClass().getName());
-        if (intent != null) {
-            try {
-                widget.startActivityForResult(intent, 0);
-            } catch (ActivityNotFoundException e) {
-                Log.w(TAG, "Activity was not found for intent, " + intent.toString());
-            }
+    private void init() {
+        if (getKey().equals(PrivateDnsPreferenceController.getKey(NetworkType.PHYSICAL))) {
+            mNetworkType = NetworkType.PHYSICAL;
+        } else {
+            mNetworkType = NetworkType.VPN;
         }
-    });
+
+        mTarget = mNetworkType == NetworkType.PHYSICAL ? GlobalOrUserId.GLOBAL :
+                GlobalOrUserId.currentUserId();
+    }
 
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
@@ -136,10 +134,17 @@ public class PrivateDnsModeDialogPreference extends CustomDialogPreferenceCompat
     @Override
     protected void onBindDialogView(View view) {
         final Context context = getContext();
-        mMode = ConnectivitySettingsManager.getPrivateDnsMode(context);
+        mMode = ConnectivitySettingsManager.getPrivateDnsMode(context, mTarget);
         mRadioGroup = view.findViewById(R.id.private_dns_radio_group);
         mRadioGroup.check(PRIVATE_DNS_MAP.getOrDefault(mMode, R.id.private_dns_mode_opportunistic));
         mRadioGroup.setOnCheckedChangeListener(this);
+
+        final TextView descriptionTextView = view.findViewById(R.id.private_dns_description);
+        if (mNetworkType == NetworkType.PHYSICAL) {
+            descriptionTextView.setText(R.string.physical_private_dns_description);
+        } else {
+            descriptionTextView.setText(R.string.vpn_private_dns_description);
+        }
 
         // Initial radio button text
         final RadioButton offRadioButton = view.findViewById(R.id.private_dns_mode_off);
@@ -154,22 +159,9 @@ public class PrivateDnsModeDialogPreference extends CustomDialogPreferenceCompat
         mHostnameLayout = view.findViewById(R.id.private_dns_mode_provider_hostname_layout);
         mHostnameText = view.findViewById(R.id.private_dns_mode_provider_hostname);
         if (mHostnameText != null) {
-            mHostnameText.setText(ConnectivitySettingsManager.getPrivateDnsHostname(context));
+            mHostnameText.setText(ConnectivitySettingsManager.getPrivateDnsHostname(context,
+                    mTarget));
             mHostnameText.addTextChangedListener(this);
-        }
-
-        final TextView helpTextView = view.findViewById(R.id.private_dns_help_info);
-        helpTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        final Intent helpIntent = HelpUtils.getHelpIntent(context,
-                context.getString(R.string.help_uri_private_dns),
-                context.getClass().getName());
-        final AnnotationSpan.LinkInfo linkInfo = new AnnotationSpan.LinkInfo(context,
-                ANNOTATION_URL, helpIntent);
-        if (linkInfo.isActionable()) {
-            helpTextView.setText(AnnotationSpan.linkify(
-                    context.getText(R.string.private_dns_help_message), linkInfo));
-        } else {
-            helpTextView.setText("");
         }
 
         updateDialogInfo();
@@ -214,6 +206,9 @@ public class PrivateDnsModeDialogPreference extends CustomDialogPreferenceCompat
     }
 
     private EnforcedAdmin getEnforcedAdmin() {
+        if (mNetworkType == NetworkType.VPN) {
+            return null;
+        }
         return RestrictedLockUtilsInternal.checkIfRestrictionEnforced(
                 getContext(), UserManager.DISALLOW_CONFIG_PRIVATE_DNS, UserHandle.myUserId());
     }
@@ -267,10 +262,10 @@ public class PrivateDnsModeDialogPreference extends CustomDialogPreferenceCompat
             }
 
             ConnectivitySettingsManager.setPrivateDnsHostname(context,
-                    mHostnameText.getText().toString());
+                    mHostnameText.getText().toString(), mTarget);
         }
 
-        ConnectivitySettingsManager.setPrivateDnsMode(context, mMode);
+        ConnectivitySettingsManager.setPrivateDnsMode(context, mMode, mTarget);
 
         FeatureFactory.getFeatureFactory().getMetricsFeatureProvider()
                 .action(context, SettingsEnums.ACTION_PRIVATE_DNS_MODE, mMode);

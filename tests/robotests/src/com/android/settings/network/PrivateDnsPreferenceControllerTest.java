@@ -47,6 +47,7 @@ import static org.mockito.Mockito.withSettings;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.ext.ConnectivityUtil.NetworkType;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.ConnectivitySettingsManager;
@@ -137,7 +138,7 @@ public class PrivateDnsPreferenceControllerTest {
 
         when(mScreen.findPreference(anyString())).thenReturn(mPreference);
 
-        mController = spy(new PrivateDnsPreferenceController(mContext));
+        mController = spy(new PrivateDnsPreferenceController(mContext, NetworkType.PHYSICAL));
 
         mLifecycleOwner = () -> mLifecycle;
         mLifecycle = new Lifecycle(mLifecycleOwner);

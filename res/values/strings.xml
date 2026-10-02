@@ -3182,6 +3182,8 @@
     <string name="private_dns_help_message"><annotation id="url">Learn more</annotation> about Private DNS features</string>
     <!-- Message to display when private dns is on. [CHAR LIMIT=10] -->
     <string name="private_dns_mode_on">On</string>
+    <string name="physical_private_dns_description">This global configuration applies to all apps that directly access a physical (cellular, WiFi, etc.) network.</string>
+    <string name="vpn_private_dns_description">This per-user configuration applies to all apps that are under a VPN.</string>
 
     <!-- Message to display when wifi calling needs activation [CHAR LIMIT=NONE] -->
     <string name="wifi_calling_settings_activation_instructions">Activate Wi\u2011Fi Calling</string>
